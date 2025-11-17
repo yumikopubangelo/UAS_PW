@@ -1,0 +1,44 @@
+POST DATA: Array
+(
+    [tipe_transaksi] => penjualan
+    [pelanggan_id] => 
+    [metode_bayar] => Tunai
+    [jumlah_bayar] => 150000
+    [detail_items_json] => [{"tipe":"barang","barang_id_int":"1","kode_barang":"0","nama":"Anting Emas Mutiara","kadar":"9K","berat":5.25,"harga":103719,"ongkos":0}]
+)
+
+SESSION DATA: 
+
+POST DATA: Array
+(
+    [tipe_transaksi] => penjualan
+    [pelanggan_id] => 
+    [metode_bayar] => Tunai
+    [jumlah_bayar] => 150000
+    [detail_items_json] => [{"tipe":"barang","barang_id_int":"1","kode_barang":"0","nama":"Anting Emas Mutiara","kadar":"9K","berat":5.25,"harga":103719,"ongkos":0}]
+)
+
+SESSION DATA: 
+
+POST DATA: Array
+(
+    [tipe_transaksi] => penjualan
+    [pelanggan_id] => 
+    [metode_bayar] => Tunai
+    [jumlah_bayar] => 150000
+    [detail_items_json] => [{"tipe":"barang","barang_id_int":"1","kode_barang":"0","nama":"Anting Emas Mutiara","kadar":"9K","berat":5.25,"harga":103719,"ongkos":0}]
+)
+
+SESSION DATA: 
+
+POST DATA: Array
+(
+    [tipe_transaksi] => penjualan
+    [pelanggan_id] => 
+    [metode_bayar] => Tunai
+    [jumlah_bayar] => 150000
+    [detail_items_json] => [{"tipe":"barang","barang_id_int":"1","kode_barang":"0","nama":"Anting Emas Mutiara","kadar":"9K","berat":5.25,"harga":103719,"ongkos":0}]
+)
+
+SESSION DATA: 
+

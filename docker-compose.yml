@@ -1,0 +1,60 @@
+# Versi Docker Compose
+version: '3.8'
+
+# Mendefinisikan semua "layanan" atau kontainer
+services:
+  
+  # Layanan 1: Database (MySQL/MariaDB)
+  # Kita sebut 'db'
+  db:
+    image: mariadb:10.6 # Gunakan MariaDB (sangat kompatibel dengan XAMPP MySQL)
+    container_name: toko-emas-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_super_aman
+      MYSQL_DATABASE: toko_emas_amanda # Nama database yang akan dibuat
+    ports:
+      # Port 3308 sudah benar untuk menghindari konflik
+      - "3308:3306"
+    volumes:
+      # 1. Ini akan mengimpor .sql Anda secara OTOMATIS saat pertama kali dijalankan
+      - ./database:/docker-entrypoint-initdb.d
+      # 2. Ini menyimpan data database Anda secara permanen
+      - db_data:/var/lib/mysql
+
+  # Layanan 2: Web Server (Apache + PHP)
+  # Kita sebut 'web'
+  web:
+    # 'build: .' berarti "lihat Dockerfile di folder ini"
+    build: . 
+    container_name: toko-emas-web
+    restart: always
+    ports:
+      # Akses website Anda nanti di http://localhost:8000
+      - "8000:80"
+    volumes:
+      # Ini menghubungkan folder 'public_html' Anda ke server Apache di kontainer
+      # HANYA baris ini yang diperlukan untuk layanan web
+      - ./public_html:/var/www/html
+    # 'depends_on' memastikan 'db' nyala dulu sebelum 'web'
+    depends_on:
+      - db
+
+  # Layanan 3: phpMyAdmin (Opsional, tapi sangat disarankan)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: toko-emas-pma
+    restart: always
+    ports:
+      # Akses phpMyAdmin nanti di http://localhost:8081
+      - "8081:80"
+    environment:
+      # Menghubungkan phpMyAdmin ke 'db'
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+# 'Volume' yang disebut di 'db'
+volumes:
+  db_data:

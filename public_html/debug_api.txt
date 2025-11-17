@@ -1,0 +1,78 @@
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => 0
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => BRG00007
+    [tipe] => penjualan
+)
+
