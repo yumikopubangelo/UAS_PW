@@ -199,7 +199,7 @@ if ($is_admin_or_pemilik) {
                     <h1>Manajemen Stok</h1>
                 </div>
                 <div class="user-info">
-                    <span>Halo, <strong><?php echo htmlspecialchars($nama_karyawan); ?> (<?php echo $role_text; ?>)</strong></span>
+                    <span>Halo, <strong><?php echo htmlspecialchars($nama_karyawan ?? ''); ?> (<?php echo $role_text; ?>)</strong></span>
                     <a href="<?php echo $logout_url; ?>" class="logout-button">Logout</a>
                 </div>
             </header>
@@ -208,10 +208,10 @@ if ($is_admin_or_pemilik) {
                 
                 <?php
                 if ($success_message) {
-                    echo '<div class="message success">' . htmlspecialchars($success_message) . '</div>';
+                    echo '<div class="message success">' . htmlspecialchars($success_message ?? '') . '</div>';
                 }
                 if ($error_message) {
-                    echo '<div class="message error">' . htmlspecialchars($error_message) . '</div>';
+                    echo '<div class="message error">' . htmlspecialchars($error_message ?? '') . '</div>';
                 }
                 ?>
 
