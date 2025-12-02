@@ -267,7 +267,7 @@ if ($is_admin_or_pemilik) {
     <?php endif; ?>
     
     <td data-label="Tgl. Masuk"><?php echo date("d-m-Y", strtotime($item['TanggalMasuk'])); ?></td>
-    <td data-label="Asal Barang"><?php echo htmlspecialchars($item['AsalBarang']); ?></td>
+    <td data-label="Asal Barang"><?php echo htmlspecialchars($item['AsalBarang'] ?? ''); ?></td>
     <td data-label="Status">
         <?php if ($item['Status'] == 'Tersedia'): ?>
             <span class="status status-tersedia">Tersedia</span>
