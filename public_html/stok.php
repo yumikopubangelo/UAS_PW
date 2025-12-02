@@ -254,11 +254,11 @@ if ($is_admin_or_pemilik) {
                         <?php else: ?>
                             <?php foreach ($stok_list as $item): ?>
                             <tr>
-    <td data-label="Kode"><?php echo htmlspecialchars($item['KodeBarang']); ?></td>
-    <td data-label="Nama Barang"><?php echo htmlspecialchars($item['NamaProduk']); ?></td>
-    <td data-label="Tipe"><?php echo htmlspecialchars($item['Tipe']); ?></td>
-    <td data-label="Kadar"><?php echo htmlspecialchars($item['Kadar']); ?></td>
-    <td data-label="Berat"><?php echo number_format($item['BeratGram'], 2, ',', '.'); ?> gr</td>
+    <td data-label="Kode"><?php echo htmlspecialchars($item['KodeBarang']?? ''); ?></td>
+    <td data-label="Nama Barang"><?php echo htmlspecialchars($item['NamaProduk']?? ''); ?></td>
+    <td data-label="Tipe"><?php echo htmlspecialchars($item['Tipe']?? ''); ?></td>
+    <td data-label="Kadar"><?php echo htmlspecialchars($item['Kadar']?? ''); ?></td>
+    <td data-label="Berat"><?php echo number_format($item['BeratGram'], 2, ',', '.' ?? ''); ?> gr</td>
     
     <?php if ($is_admin_or_pemilik): ?>
         <td data-label="Modal (HPP)" class="col-modal">
