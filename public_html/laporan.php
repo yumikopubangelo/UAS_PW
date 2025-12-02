@@ -121,34 +121,12 @@ $total_laba_kotor = $total_omset_bruto - $total_modal_hpp;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan - Sistem Toko Emas</title>
     <link rel="stylesheet" href="dashboard.css">
-    <style>
-        .report-filters { background-color: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .filter-inputs { display: flex; align-items: center; gap: 1rem; }
-        .filter-inputs label { font-weight: 500; }
-        .filter-inputs input[type="date"], .filter-inputs button { padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; }
-        .filter-inputs button { border: none; background-color: #007bff; color: white; cursor: pointer; }
-        .filter-inputs button:hover { background-color: #0056b3; }
-        .print-button { padding: 0.75rem 1.2rem; border: none; border-radius: 6px; background-color: #28a745; color: white; font-weight: 500; cursor: pointer; text-decoration: none; }
-        .print-button:hover { background-color: #218838; }
-        .report-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .summary-card { background-color: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
-        .summary-card h3 { margin: 0 0 0.5rem 0; font-size: 1rem; color: #555; text-transform: uppercase; }
-        .summary-card .value { font-size: 2.2rem; font-weight: 700; color: #333; }
-        .summary-card .value.profit { color: #28a745; }
-        .summary-card .value.expense { color: #dc3545; }
-        .stock-table { width: 100%; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.08); border-radius: 10px; overflow: hidden; }
-        .stock-table th, .stock-table td { padding: 1rem 1.25rem; text-align: left; border-bottom: 1px solid #f0f0f0; }
-        .stock-table thead { background-color: #f8f9fa; }
-        .stock-table th { font-weight: 600; color: #555; font-size: 0.9rem; text-transform: uppercase; }
-        .stock-table td { color: #333; }
-        .col-profit { font-weight: 600; color: #28a745; }
-        .col-loss { font-weight: 600; color: #dc3545; }
-    </style>
+    <link rel="stylesheet" href="laporan.css">
 </head>
 <body>
 
     <div class="dashboard-container">
-        
+
         <nav class="sidebar">
             <div class="sidebar-header"><h3>Toko Emas UMKM</h3></div>
             <ul class="sidebar-menu">
@@ -172,6 +150,8 @@ $total_laba_kotor = $total_omset_bruto - $total_modal_hpp;
                 <?php endif; ?>
             </ul>
         </nav>
+
+        <div class="sidebar-overlay"></div>
 
         <main class="main-content">
             
@@ -283,12 +263,54 @@ $total_laba_kotor = $total_omset_bruto - $total_modal_hpp;
     </div>
 
 <script>
+    // Mobile menu button
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+
+    // Buat tombol menu mobile
+    const menuBtn = document.createElement('button');
+    menuBtn.className = 'mobile-menu-btn';
+    menuBtn.innerHTML = '<span></span><span></span><span></span>';
+    document.body.appendChild(menuBtn);
+
+    // Toggle menu saat tombol diklik
+    menuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        if (overlay) overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        // Hide hamburger button when menu is open
+        menuBtn.style.display = sidebar.classList.contains('active') ? 'none' : 'block';
+    });
+
+    // Close menu when clicking overlay
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Show hamburger button when menu is closed
+            menuBtn.style.display = 'block';
+        });
+    }
+
+    // Close menu on window resize if desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Show hamburger button when menu is closed
+            menuBtn.style.display = 'block';
+        }
+    });
+
+    // Submenu toggle
     var submenuToggle = document.querySelector('.has-submenu');
     if (submenuToggle) {
         submenuToggle.addEventListener('click', function(e) {
             e.preventDefault();
             let submenu = this.nextElementSibling;
-            
+
             // Perbaikan: Buka/Tutup submenu Data Master
             if (submenu.style.display === 'block') {
                 submenu.style.display = 'none';

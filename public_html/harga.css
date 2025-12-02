@@ -1,0 +1,303 @@
+/* ===== RESPONSIVE STYLES FOR HARGA.PHP ===== */
+
+/* Page Grid */
+.page-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.form-card,
+.table-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.form-card h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.btn-primary,
+.btn-secondary {
+    width: 100%;
+    padding: 0.75rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.api-note {
+    font-size: 0.85rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table thead {
+    background-color: #f8f9fa;
+}
+
+.data-table th {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.data-table td {
+    color: #333;
+}
+
+.col-jual {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.col-beli {
+    font-weight: 600;
+    color: #dc3545;
+}
+
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (1024px - 768px) */
+@media screen and (max-width: 1024px) {
+    .page-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .form-card,
+    .table-card {
+        padding: 1.25rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile Large (481px - 768px) */
+@media screen and (max-width: 768px) {
+    .page-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .form-card,
+    .table-card {
+        padding: 1rem;
+    }
+
+    .form-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.65rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .api-note {
+        font-size: 0.8rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .data-table th {
+        font-size: 0.8rem;
+    }
+}
+
+/* Mobile Small (320px - 480px) */
+@media screen and (max-width: 480px) {
+    .page-grid {
+        gap: 0.75rem;
+    }
+
+    .form-card,
+    .table-card {
+        padding: 0.75rem;
+    }
+
+    .form-card h3 {
+        font-size: 1rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.75rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .api-note {
+        font-size: 0.75rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .data-table th {
+        font-size: 0.75rem;
+    }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 360px) {
+    .form-card,
+    .table-card {
+        padding: 0.65rem;
+    }
+
+    .form-card h3 {
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.55rem;
+        font-size: 0.85rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.4rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .page-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card,
+    .table-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+    }
+
+    .message {
+        display: none;
+    }
+}

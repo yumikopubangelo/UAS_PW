@@ -1,187 +1,399 @@
-/* Reset dasar dan font */
-body, html {
+/* ===== RESET & VARIABEL ===== */
+* {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
+    box-sizing: border-box;
 }
 
-/* Kontainer utama (Sidebar + Konten) */
+:root {
+    --primary-color: #2c3e50;
+    --primary-hover: #2c3e50;
+    --sidebar-width: 260px;
+    --header-height: 70px;
+    --bg-light: #f8f9fa;
+    --text-dark: #333;
+    --text-light: #666;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+/* ===== DASHBOARD CONTAINER ===== */
 .dashboard-container {
     display: flex;
-    width: 100%;
     min-height: 100vh;
 }
 
-/* === Styling Sidebar === */
+/* ===== SIDEBAR ===== */
 .sidebar {
-    width: 250px;
-    background-color: #2c3e50; /* Biru gelap */
-    color: #ecf0f1;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0; /* Mencegah sidebar menyusut */
+    width: var(--sidebar-width);
+    background: linear-gradient(180deg, #2c3e50 0%, #2c3e50 100%);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: var(--transition);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
 
 .sidebar-header {
-    padding: 1.5rem;
-    text-align: center;
-    border-bottom: 1px solid #34495e;
+    padding: 1.5rem 1.25rem;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .sidebar-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
     margin: 0;
-    font-size: 1.4rem;
 }
 
 .sidebar-menu {
     list-style: none;
-    padding: 0;
+    padding: 1rem 0;
+}
+
+.sidebar-menu > li {
     margin: 0;
-    flex-grow: 1;
 }
 
-.sidebar-menu li a {
+.sidebar-menu > li > a {
     display: block;
-    padding: 1rem 1.5rem;
+    padding: 0.95rem 1.25rem;
+    color: rgba(255,255,255,0.9);
     text-decoration: none;
-    color: #ecf0f1;
-    font-weight: 500;
-    border-bottom: 1px solid #34495e;
-    transition: background-color 0.2s ease;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
 }
 
-.sidebar-menu li.active a,
-.sidebar-menu li a:hover {
-    background-color: #34495e; /* Biru sedikit lebih terang */
+.sidebar-menu > li > a:hover,
+.sidebar-menu > li.active > a {
+    background: rgba(255,255,255,0.1);
+    border-left-color: #ffc107;
+    color: white;
 }
 
-/* Styling Submenu */
+.sidebar-menu > li > a.has-submenu::after {
+    content: "▼";
+    float: right;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
 .submenu {
     list-style: none;
-    padding: 0;
-    margin: 0;
-    background-color: #1a252f; /* Lebih gelap */
-    display: none; /* Sembunyi by default */
+    background: rgba(0,0,0,0.15);
+    padding: 0.5rem 0;
 }
+
 .submenu li a {
-    padding-left: 2.5rem; /* Indentasi */
-    font-size: 0.9rem;
-    border-bottom: none; /* Hapus border untuk submenu */
+    display: block;
+    padding: 0.75rem 1.25rem 0.75rem 2.5rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: var(--transition);
 }
+
 .submenu li a:hover {
-    background-color: #34495e;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    padding-left: 2.75rem;
 }
 
-/* Menu khusus admin (nanti diatur via server) */
-.admin-menu a {
-    /* (Opsional) Beri warna beda, misal sedikit kuning */
-    /* border-left: 3px solid #f39c12; */
-}
-
-/* === Styling Konten Utama === */
+/* ===== MAIN CONTENT ===== */
 .main-content {
-    flex-grow: 1; /* Mengisi sisa ruang */
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    transition: var(--transition);
 }
 
-/* Header di dalam konten */
+/* ===== HEADER ===== */
 .header {
+    background: white;
+    padding: 1.25rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-height);
 }
 
 .header-title h1 {
-    margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-dark);
 }
 
 .user-info {
     display: flex;
     align-items: center;
+    gap: 1.5rem;
 }
 
 .user-info span {
-    margin-right: 1.5rem;
     font-size: 0.95rem;
+    color: var(--text-light);
 }
 
 .logout-button {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: #e74c3c; /* Merah */
+    padding: 0.6rem 1.5rem;
+    background-color: #dc3545;
     color: white;
+    text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-.logout-button:hover {
-    background-color: #c0392b; /* Merah gelap */
+    transition: var(--transition);
 }
 
-/* Wrapper untuk isi konten halaman */
+.logout-button:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220,53,69,0.3);
+}
+
+/* ===== CONTENT WRAPPER ===== */
 .content-wrapper {
     padding: 2rem;
-    flex-grow: 1; /* Pastikan konten mengisi ruang */
 }
 
 .welcome-message {
     font-size: 1.2rem;
-    color: #555;
+    color: var(--text-light);
     margin-bottom: 2rem;
 }
 
-/* Kartu Akses Cepat */
+/* ===== QUICK ACCESS CARDS ===== */
 .quick-access {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsif */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
 }
 
-.harga-preview {
-    display: block;
-    margin-top: 5px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #007bff; /* Warna biru */
-}
-
 .card {
-    background-color: #ffffff;
+    background-color: white;
     border-radius: 10px;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
 }
 
 .card h3 {
     margin: 0 0 0.75rem 0;
-    color: #007bff; /* Biru */
+    color: var(--primary-color);
+    font-size: 1.25rem;
 }
 
 .card p {
     font-size: 0.95rem;
-    line-height: 1.5;
-    color: #666;
+    line-height: 1.6;
+    color: var(--text-light);
     margin-bottom: 1.5rem;
 }
 
 .card-button {
+    display: inline-block;
     text-decoration: none;
     padding: 0.6rem 1.2rem;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     border-radius: 6px;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: var(--transition);
 }
 
 .card-button:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover);
+    transform: translateX(5px);
+}
+
+/* ===== MOBILE MENU BUTTON ===== */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1100;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.mobile-menu-btn:hover {
+    background: var(--primary-hover);
+}
+
+.mobile-menu-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    margin: 3px 0;
+    transition: var(--transition);
+}
+
+/* ===== OVERLAY ===== */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet - 768px dan ke bawah */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .header {
+        padding: 1rem 1.5rem;
+        padding-left: 4rem;
+    }
+
+    .header-title h1 {
+        font-size: 1.35rem;
+    }
+
+    .user-info {
+        gap: 1rem;
+    }
+
+    .user-info span {
+        display: none;
+    }
+
+    .content-wrapper {
+        padding: 1.5rem;
+    }
+
+    .quick-access {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile - 480px dan ke bawah */
+@media (max-width: 480px) {
+    :root {
+        --sidebar-width: 280px;
+    }
+
+    .header {
+        padding: 0.75rem 1rem;
+        padding-left: 3.5rem;
+        height: auto;
+        min-height: 60px;
+    }
+
+    .header-title h1 {
+        font-size: 1.15rem;
+    }
+
+    .logout-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .content-wrapper {
+        padding: 1rem;
+    }
+
+    .welcome-message {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+
+    .card h3 {
+        font-size: 1.1rem;
+    }
+
+    .card p {
+        font-size: 0.9rem;
+    }
+
+    .sidebar-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .sidebar-menu > li > a {
+        padding: 0.85rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    .submenu li a {
+        padding: 0.65rem 1rem 0.65rem 2rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Desktop besar - 1200px ke atas */
+@media (min-width: 1200px) {
+    .quick-access {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .content-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2.5rem;
+    }
+}
+
+/* Mode landscape pada mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .sidebar {
+        overflow-y: auto;
+    }
+
+    .header {
+        position: relative;
+    }
 }

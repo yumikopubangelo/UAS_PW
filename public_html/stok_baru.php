@@ -22,7 +22,6 @@ $is_admin_or_pemilik = true;
 $katalog_list = [];
 $supplier_list = [];
 
-// Ambil data Katalog (TERMASUK KADAR DAN SATUAN UNTUK JS)
 $sql_katalog = "SELECT ProdukKatalogID, NamaProduk, Tipe, Kadar, Satuan FROM PRODUK_KATALOG ORDER BY NamaProduk ASC";
 $result_katalog = $koneksi->query($sql_katalog);
 if ($result_katalog && $result_katalog->num_rows > 0) {
@@ -31,7 +30,6 @@ if ($result_katalog && $result_katalog->num_rows > 0) {
     }
 }
 
-// Ambil data Supplier
 $sql_supplier = "SELECT SupplierID, NamaSupplier FROM SUPPLIER ORDER BY NamaSupplier ASC";
 $result_supplier = $koneksi->query($sql_supplier);
 if ($result_supplier && $result_supplier->num_rows > 0) {
@@ -40,7 +38,6 @@ if ($result_supplier && $result_supplier->num_rows > 0) {
     }
 }
 
-// Ambil pesan notifikasi
 $error_message = $_SESSION['error_message'] ?? null;
 unset($_SESSION['error_message']);
 
@@ -65,148 +62,36 @@ $logout_url = "logout.php";
     <title>Tambah Stok Baru - Sistem Toko Emas</title>
     <link rel="stylesheet" href="dashboard.css">
     <style>
-        .form-card { 
-            background-color: #fff; 
-            padding: 1.5rem; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08); 
-            max-width: 700px; 
-            margin: 2rem auto; 
-        }
-        .form-card h3 { 
-            margin-top: 0; 
-            border-bottom: 2px solid #f0f0f0; 
-            padding-bottom: 1rem; 
-        }
-        .form-group { 
-            margin-bottom: 1rem; 
-        }
-        .form-group label { 
-            display: block; 
-            margin-bottom: 0.5rem; 
-            font-weight: 500; 
-        }
-        .form-group input, .form-group select { 
-            width: 100%; 
-            padding: 0.75rem; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-        }
-        .form-row { 
-            display: flex; 
-            gap: 1rem; 
-        }
-        .form-row .form-group { 
-            flex: 1; 
-        }
-        .btn-primary { 
-            width: 100%; 
-            padding: 0.75rem 1.2rem; 
-            border: none; 
-            border-radius: 6px; 
-            background-color: #007bff; 
-            color: white; 
-            font-weight: 500; 
-            cursor: pointer; 
-            text-decoration: none; 
-            transition: background-color 0.2s ease; 
-            text-align: center; 
-            font-size: 1rem; 
-        }
-        .btn-primary:hover { 
-            background-color: #0056b3; 
-        }
-        .btn-secondary { 
-            display: inline-block; 
-            text-align: center; 
-            width: 100%; 
-            box-sizing: border-box; 
-            padding: 0.75rem; 
-            background-color: #6c757d; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 6px; 
-            margin-top: 1rem; 
-        }
-        .message { 
-            padding: 10px; 
-            margin-bottom: 15px; 
-            border-radius: 4px; 
-            text-align: center; 
-            font-weight: bold; 
-        }
-        .error { 
-            background-color: #f8d7da; 
-            color: #721c24; 
-        }
+        .form-card { background-color: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); max-width: 700px; margin: 2rem auto; }
+        .form-card h3 { margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
+        .btn-primary { width: 100%; padding: 0.75rem 1.2rem; border: none; border-radius: 6px; background-color: #007bff; color: white; font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color 0.2s ease; text-align: center; font-size: 1rem; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary { display: inline-block; text-align: center; width: 100%; box-sizing: border-box; padding: 0.75rem; background-color: #6c757d; color: white; text-decoration: none; border-radius: 6px; margin-top: 1rem; }
+        .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center; font-weight: bold; }
+        .error { background-color: #f8d7da; color: #721c24; }
         
-        /* CSS UNTUK REKOMENDASI HARGA */
-        .harga-rekomendasi {
-            font-size: 0.9rem;
-            margin-top: 8px;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-            transition: all 0.3s ease;
-        }
-        .harga-rekomendasi.success {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        .harga-rekomendasi.error {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        .harga-rekomendasi.loading {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-        }
-        .harga-rekomendasi.info {
-            background-color: #d1ecf1;
-            border: 1px solid #bee5eb;
-            color: #0c5460;
-        }
-        .harga-detail {
-            margin-top: 5px;
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
+        .harga-rekomendasi { font-size: 0.9rem; margin-top: 8px; padding: 10px; border-radius: 5px; display: none; transition: all 0.3s ease; }
+        .harga-rekomendasi.success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .harga-rekomendasi.error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .harga-rekomendasi.loading { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .harga-detail { margin-top: 5px; font-size: 0.85rem; opacity: 0.8; }
+        .satuan-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.75rem; font-weight: bold; margin-left: 5px; }
+        .satuan-gram { background-color: #ffc107; color: #000; }
+        .satuan-pcs { background-color: #17a2b8; color: #fff; }
+        .konversi-info { background-color: #e7f3ff; border-left: 4px solid #2196F3; padding: 10px; margin-top: 8px; border-radius: 4px; font-size: 0.9rem; display: none; }
         
-        /* Badge untuk menampilkan satuan */
-        .satuan-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-        .satuan-gram {
-            background-color: #ffc107;
-            color: #000;
-        }
-        .satuan-pcs {
-            background-color: #17a2b8;
-            color: #fff;
-        }
-        
-        /* Info konversi kadar */
-        .konversi-info {
-            background-color: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            display: none;
-        }
-        .konversi-info strong {
-            color: #1976D2;
-        }
+        /* STYLE BARU UNTUK QUANTITY */
+        .quantity-info { background-color: #fff9e6; border-left: 4px solid #ff9800; padding: 12px; margin-top: 10px; border-radius: 4px; display: none; }
+        .quantity-info strong { color: #e65100; }
+        .batch-summary { background-color: #e8f5e9; border: 2px solid #4caf50; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
+        .batch-summary h4 { margin: 0 0 10px 0; color: #2e7d32; }
+        .batch-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #c8e6c9; }
+        .qty-badge { background-color: #ff9800; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -218,7 +103,6 @@ $logout_url = "logout.php";
                 <li><a href="home.php">Dashboard</a></li>
                 <li><a href="transaksi_baru.php">Transaksi Baru (POS)</a></li>
                 <li class="active"><a href="stok.php">Manajemen Stok</a></li>
-                
                 <?php if ($is_admin_or_pemilik): ?>
                     <li><a href="laporan.php">Laporan Penjualan</a></li>
                     <li>
@@ -249,11 +133,9 @@ $logout_url = "logout.php";
             <div class="content-wrapper">
                 <div class="form-card">
                     <h3>Detail Barang Stok (Kode Otomatis)</h3>
-                    
                     <?php if ($error_message): ?>
                         <div class="message error"><?php echo htmlspecialchars($error_message); ?></div>
                     <?php endif; ?>
-
                     <form action="proses_stok_baru.php" method="POST">
                         
                         <div class="form-group">
@@ -273,12 +155,12 @@ $logout_url = "logout.php";
                             </select>
                         </div>
 
+                        <!-- FIELD QUANTITY BARU -->
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="berat_gram" id="label_berat">Berat (Gram) (Wajib)</label>
-                                <input type="number" step="0.01" id="berat_gram" name="berat_gram" placeholder="Contoh: 5.25" required>
-                                <small style="color: #666; font-size: 0.85rem;" id="berat_hint">Masukkan berat dalam gram</small>
-                                <div id="konversi_info" class="konversi-info"></div>
+                                <label for="quantity">Jumlah Item (Qty)</label>
+                                <input type="number" step="1" min="1" id="quantity" name="quantity" value="1" required>
+                                <small style="color: #666; font-size: 0.85rem;">Berapa banyak item yang sama?</small>
                             </div>
                             <div class="form-group">
                                 <label for="asal_barang">Asal Barang</label>
@@ -290,27 +172,68 @@ $logout_url = "logout.php";
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="harga_beli_modal">Harga Beli / Modal (Wajib)</label>
-                            <input type="number" id="harga_beli_modal" name="harga_beli_modal" placeholder="Harga modal barang" required>
-                            <div id="rekomendasi_harga" class="harga-rekomendasi"></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="berat_gram" id="label_berat">Berat per Item (Gram) (Wajib)</label>
+                                <input type="number" step="0.01" id="berat_gram" name="berat_gram" placeholder="Contoh: 5.25" required>
+                                <small style="color: #666; font-size: 0.85rem;" id="berat_hint">Berat untuk 1 item</small>
+                                <div id="konversi_info" class="konversi-info"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="harga_beli_modal">Harga Modal per Item (Wajib)</label>
+                                <input type="number" step="1" min="0" id="harga_beli_modal" name="harga_beli_modal" placeholder="Contoh: 1750000" required>
+                                <small style="color: #666; font-size: 0.85rem;">Masukkan angka tanpa titik/koma (Contoh: 1750000 untuk 1,75jt)</small>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="tanggal_masuk">Tanggal Masuk (Wajib)</label>
-                            <input type="date" id="tanggal_masuk" name="tanggal_masuk" value="<?php echo date('Y-m-d'); ?>" required>
+                        <!-- INFO QUANTITY -->
+                        <div id="quantity_info" class="quantity-info">
+                            <strong>📦 Batch Input:</strong> Sistem akan membuat <span id="qty_display" class="qty-badge">1</span> item dengan kode berbeda secara otomatis
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="supplier_id">Supplier (Jika Asal = Supplier)</label>
-                            <select id="supplier_id" name="supplier_id">
-                                <option value="">-- Tidak Ada --</option>
-                                 <?php foreach ($supplier_list as $supplier): ?>
-                                    <option value="<?php echo $supplier['SupplierID']; ?>">
-                                        <?php echo htmlspecialchars($supplier['NamaSupplier']); ?>
-                                    </option>
-                                 <?php endforeach; ?>
-                            </select>
+
+                        <!-- SUMMARY BATCH -->
+                        <div id="batch_summary" class="batch-summary">
+                            <h4>📋 Ringkasan Batch Input</h4>
+                            <div class="batch-item">
+                                <span>Total Item:</span>
+                                <strong id="summary_qty">1 pcs</strong>
+                            </div>
+                            <div class="batch-item">
+                                <span>Berat per Item:</span>
+                                <strong id="summary_berat">0 gram</strong>
+                            </div>
+                            <div class="batch-item">
+                                <span>Total Berat Keseluruhan:</span>
+                                <strong id="summary_total_berat">0 gram</strong>
+                            </div>
+                            <div class="batch-item">
+                                <span>Modal per Item:</span>
+                                <strong id="summary_modal">Rp 0</strong>
+                            </div>
+                            <div class="batch-item" style="border-bottom: none; padding-top: 10px; border-top: 2px solid #4caf50;">
+                                <span>TOTAL MODAL KESELURUHAN:</span>
+                                <strong id="summary_total_modal" style="color: #2e7d32; font-size: 1.1rem;">Rp 0</strong>
+                            </div>
+                        </div>
+
+                        <div id="rekomendasi_harga" class="harga-rekomendasi"></div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tanggal_masuk">Tanggal Masuk (Wajib)</label>
+                                <input type="date" id="tanggal_masuk" name="tanggal_masuk" value="<?php echo date('Y-m-d'); ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="supplier_id">Supplier (Jika Asal = Supplier)</label>
+                                <select id="supplier_id" name="supplier_id">
+                                    <option value="">-- Tidak Ada --</option>
+                                     <?php foreach ($supplier_list as $supplier): ?>
+                                        <option value="<?php echo $supplier['SupplierID']; ?>">
+                                            <?php echo htmlspecialchars($supplier['NamaSupplier']); ?>
+                                        </option>
+                                     <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn-primary">Simpan Stok Baru</button>
@@ -322,55 +245,62 @@ $logout_url = "logout.php";
     </div>
     
     <script>
-        // Ambil elemen-elemen yang diperlukan
         const produkSelect = document.getElementById('produk_katalog_id');
         const beratInput = document.getElementById('berat_gram');
         const labelBerat = document.getElementById('label_berat');
         const beratHint = document.getElementById('berat_hint');
         const rekomendasiDiv = document.getElementById('rekomendasi_harga');
         const asalBarangSelect = document.getElementById('asal_barang');
-        const hargaModalInput = document.getElementById('harga_beli_modal');
         const satuanIndicator = document.getElementById('satuan_indicator');
         const konversiInfo = document.getElementById('konversi_info');
+        const quantityInput = document.getElementById('quantity');
+        const quantityInfo = document.getElementById('quantity_info');
+        const qtyDisplay = document.getElementById('qty_display');
+        const batchSummary = document.getElementById('batch_summary');
+        const hargaModalInput = document.getElementById('harga_beli_modal');
 
         let dataKadar = '';
         let dataSatuan = '';
         let dataBerat = 0;
+        let dataQuantity = 1;
+        let dataModal = 0;
         let isLoading = false;
 
-        // Mapping kadar ke persentase kemurnian
         const kadarMapping = {
-            '24K': 99.9,
-            '23K': 95.8,
-            '22K': 91.6,
-            '21K': 87.5,
-            '20K': 83.3,
-            '18K': 75.0,
-            '17K': 70.8,
-            '16K': 66.6,
-            '14K': 58.3,
-            '10K': 41.6,
-            '9K': 37.5,
-            '8K': 33.3,
-            'Emas Muda': 50.0
+            '24K': 99.9, '23K': 95.8, '22K': 91.6, '21K': 87.5, '20K': 83.3,
+            '18K': 75.0, '17K': 70.8, '16K': 66.6, '14K': 58.3, '10K': 41.6,
+            '9K': 37.5, '8K': 33.3, '6K': 25.0, 'Emas Muda': 50.0
         };
 
-        // Fungsi format Rupiah
         const formatRupiah = (number) => {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency', 
-                currency: 'IDR', 
-                minimumFractionDigits: 0
-            }).format(number);
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         };
 
-        // Fungsi untuk menghitung berat emas murni
         function hitungBeratEmasMurni(beratTotal, kadar) {
             const persenKemurnian = kadarMapping[kadar] || 0;
             return (beratTotal * persenKemurnian) / 100;
         }
 
-        // Fungsi untuk menampilkan loading
+        function updateBatchSummary() {
+            if (dataQuantity > 1) {
+                quantityInfo.style.display = 'block';
+                batchSummary.style.display = 'block';
+                qtyDisplay.textContent = dataQuantity;
+                
+                const totalBerat = dataBerat * dataQuantity;
+                const totalModal = dataModal * dataQuantity;
+                
+                document.getElementById('summary_qty').textContent = dataQuantity + ' pcs';
+                document.getElementById('summary_berat').textContent = dataBerat > 0 ? dataBerat.toFixed(2) + ' gram' : '0 gram';
+                document.getElementById('summary_total_berat').textContent = totalBerat > 0 ? totalBerat.toFixed(2) + ' gram' : '0 gram';
+                document.getElementById('summary_modal').textContent = dataModal > 0 ? formatRupiah(dataModal) : 'Rp 0';
+                document.getElementById('summary_total_modal').textContent = totalModal > 0 ? formatRupiah(totalModal) : 'Rp 0';
+            } else {
+                quantityInfo.style.display = 'none';
+                batchSummary.style.display = 'none';
+            }
+        }
+
         function showLoading() {
             isLoading = true;
             rekomendasiDiv.className = 'harga-rekomendasi loading';
@@ -378,42 +308,30 @@ $logout_url = "logout.php";
             rekomendasiDiv.innerHTML = '⏳ Menghitung rekomendasi harga...';
         }
 
-        // Fungsi untuk menyembunyikan rekomendasi
         function hideRekomendasi() {
             rekomendasiDiv.style.display = 'none';
             rekomendasiDiv.innerHTML = '';
         }
 
-        // Fungsi untuk update label dan placeholder berdasarkan satuan
         function updateLabelBySatuan(satuan) {
             if (satuan.toLowerCase() === 'pcs' || satuan.toLowerCase() === 'piece') {
-                // Untuk produk per pieces
-                labelBerat.innerHTML = 'Berat per Pieces (Gram) (Wajib)';
+                labelBerat.innerHTML = 'Berat per Item (Gram) (Wajib)';
                 beratInput.placeholder = 'Contoh: 2.5 (berat 1 pcs)';
-                beratInput.required = true;
-                beratHint.textContent = 'Berat untuk 1 pieces (akan dihitung berdasarkan kadar emas)';
-                
-                // Tampilkan badge
+                beratHint.textContent = 'Berat untuk 1 item';
                 satuanIndicator.innerHTML = '<span class="satuan-badge satuan-pcs">Satuan: PCS</span>';
             } else {
-                // Untuk produk per gram
-                labelBerat.innerHTML = 'Berat (Gram) (Wajib)';
+                labelBerat.innerHTML = 'Berat per Item (Gram) (Wajib)';
                 beratInput.placeholder = 'Contoh: 5.25';
-                beratInput.required = true;
-                beratHint.textContent = 'Masukkan berat dalam gram';
-                
-                // Tampilkan badge
+                beratHint.textContent = 'Berat untuk 1 item';
                 satuanIndicator.innerHTML = '<span class="satuan-badge satuan-gram">Satuan: GRAM</span>';
             }
         }
 
-        // Fungsi untuk menampilkan info konversi kadar
         function tampilkanKonversiKadar() {
             if (!dataKadar || dataBerat <= 0) {
                 konversiInfo.style.display = 'none';
                 return;
             }
-
             const persenKemurnian = kadarMapping[dataKadar];
             if (!persenKemurnian) {
                 konversiInfo.style.display = 'none';
@@ -421,80 +339,58 @@ $logout_url = "logout.php";
             }
 
             const beratEmasMurni = hitungBeratEmasMurni(dataBerat, dataKadar);
+            const totalBeratMurni = beratEmasMurni * dataQuantity;
             
             konversiInfo.style.display = 'block';
             konversiInfo.innerHTML = `
-                <strong>🔍 Konversi Kadar:</strong><br>
-                Berat Total: ${dataBerat} gram × Kemurnian ${dataKadar} (${persenKemurnian}%) 
-                = <strong>${beratEmasMurni.toFixed(2)} gram emas murni (24K)</strong>
+                <strong>🔍 Konversi Kadar per Item:</strong><br>
+                ${dataBerat} gram × ${dataKadar} (${persenKemurnian}%) = <strong>${beratEmasMurni.toFixed(2)} gram emas murni</strong><br>
+                ${dataQuantity > 1 ? `<small>Total ${dataQuantity} item = <strong>${totalBeratMurni.toFixed(2)} gram emas murni</strong></small>` : ''}
             `;
         }
 
-        // Fungsi utama untuk mengambil rekomendasi harga
         function getRekomendasiHarga() {
             const asal = asalBarangSelect.value;
-            
-            // Validasi: harus ada kadar dan berat
             if (!dataKadar || dataBerat <= 0) {
                 hideRekomendasi();
                 konversiInfo.style.display = 'none';
                 return;
             }
-
-            // Tampilkan info konversi kadar
             tampilkanKonversiKadar();
-
-            // Tampilkan loading
             showLoading();
 
-            // Untuk produk PCS: gunakan berat emas murni (konversi)
-            // Untuk produk GRAM: gunakan berat asli
             let beratUntukAPI = dataBerat;
-            let keteranganBerat = '';
-            
             if (dataSatuan.toLowerCase() === 'pcs' || dataSatuan.toLowerCase() === 'piece') {
                 const beratEmasMurni = hitungBeratEmasMurni(dataBerat, dataKadar);
                 beratUntukAPI = beratEmasMurni;
-                keteranganBerat = ` (${beratEmasMurni.toFixed(2)}g emas murni dari ${dataBerat}g total)`;
             }
 
-            // Panggil API dengan kadar 24K untuk produk PCS (karena sudah dikonversi)
             const kadarAPI = (dataSatuan.toLowerCase() === 'pcs' || dataSatuan.toLowerCase() === 'piece') ? '24K' : dataKadar;
 
             fetch(`api_get_harga_rekomendasi.php?kadar=${encodeURIComponent(kadarAPI)}&asal=${encodeURIComponent(asal)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     isLoading = false;
-                    
                     if (data.error) {
-                        // Tampilkan error
                         rekomendasiDiv.className = 'harga-rekomendasi error';
                         rekomendasiDiv.style.display = 'block';
-                        rekomendasiDiv.innerHTML = `
-                            <strong>⚠️ ${data.error}</strong>
-                            ${data.hint ? '<div class="harga-detail">' + data.hint + '</div>' : ''}
-                        `;
+                        rekomendasiDiv.innerHTML = `<strong>⚠️ ${data.error}</strong>`;
                     } else if (data.success) {
-                        // Hitung total rekomendasi berdasarkan berat yang sudah dikonversi
                         const hargaPerGram = parseFloat(data.harga_per_gram);
-                        const rekomendasiTotal = hargaPerGram * beratUntukAPI;
+                        const rekomendasiPerItem = hargaPerGram * beratUntukAPI;
+                        const rekomendasiTotal = rekomendasiPerItem * dataQuantity;
                         
-                        // Tampilkan rekomendasi sukses
                         rekomendasiDiv.className = 'harga-rekomendasi success';
                         rekomendasiDiv.style.display = 'block';
                         
                         let infoTambahan = '';
-                        if (dataSatuan.toLowerCase() === 'pcs' || dataSatuan.toLowerCase() === 'piece') {
+                        if (dataSatuan.toLowerCase() === 'pcs') {
                             infoTambahan = `<br><small>💎 Dihitung dari kandungan emas murni: ${beratUntukAPI.toFixed(2)} gram</small>`;
                         }
                         
                         rekomendasiDiv.innerHTML = `
-                            <strong>💡 Rekomendasi Modal: ${formatRupiah(rekomendasiTotal)}</strong>
+                            <strong>💡 Rekomendasi Modal per Item: ${formatRupiah(rekomendasiPerItem)}</strong>
+                            ${dataQuantity > 1 ? `<br><strong style="color: #2e7d32;">Total ${dataQuantity} item: ${formatRupiah(rekomendasiTotal)}</strong>` : ''}
                             <div class="harga-detail">
                                 Harga per gram emas 24K: ${formatRupiah(hargaPerGram)} | 
                                 Berat: ${dataBerat} gram ${dataKadar} | 
@@ -502,63 +398,51 @@ $logout_url = "logout.php";
                                 ${infoTambahan}
                             </div>
                         `;
-                        
-                        // OPSIONAL: Isi otomatis input harga modal
-                        // Uncomment baris di bawah jika ingin auto-fill
-                        // hargaModalInput.value = Math.round(rekomendasiTotal);
                     }
                 })
                 .catch(err => {
                     isLoading = false;
-                    console.error('Fetch error:', err);
                     rekomendasiDiv.className = 'harga-rekomendasi error';
                     rekomendasiDiv.style.display = 'block';
-                    rekomendasiDiv.innerHTML = '<strong>❌ Gagal mengambil data harga. Silakan coba lagi.</strong>';
+                    rekomendasiDiv.innerHTML = '<strong>❌ Gagal mengambil data harga.</strong>';
                 });
         }
 
-        // Event Listener: Saat produk diganti
         produkSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             dataKadar = selectedOption.dataset.kadar || '';
             dataSatuan = selectedOption.dataset.satuan || '';
-            
-            // Update label berdasarkan satuan
-            if (dataSatuan) {
-                updateLabelBySatuan(dataSatuan);
-            }
-            
-            // Reset info konversi
+            if (dataSatuan) updateLabelBySatuan(dataSatuan);
             konversiInfo.style.display = 'none';
-            
-            // Panggil fungsi rekomendasi jika berat sudah diisi
-            if (dataKadar && dataBerat > 0) {
-                getRekomendasiHarga();
-            } else {
-                hideRekomendasi();
-            }
+            if (dataKadar && dataBerat > 0) getRekomendasiHarga(); else hideRekomendasi();
+            updateBatchSummary();
         });
 
-        // Event Listener: Saat berat diketik
         beratInput.addEventListener('input', function() {
             dataBerat = parseFloat(this.value) || 0;
-            
-            if (dataBerat > 0 && dataKadar) {
-                getRekomendasiHarga();
-            } else {
-                hideRekomendasi();
-                konversiInfo.style.display = 'none';
-            }
+            if (dataBerat > 0 && dataKadar) getRekomendasiHarga(); else { hideRekomendasi(); konversiInfo.style.display = 'none'; }
+            updateBatchSummary();
         });
         
-        // Event Listener: Saat asal barang diganti
-        asalBarangSelect.addEventListener('change', function() {
-            if (dataKadar && dataBerat > 0) {
-                getRekomendasiHarga();
+        quantityInput.addEventListener('input', function() {
+            dataQuantity = parseInt(this.value) || 1;
+            if (dataQuantity < 1) {
+                dataQuantity = 1;
+                this.value = 1;
             }
+            updateBatchSummary();
+            if (dataKadar && dataBerat > 0) getRekomendasiHarga();
         });
 
-        // Script untuk toggle submenu
+        hargaModalInput.addEventListener('input', function() {
+            dataModal = parseFloat(this.value) || 0;
+            updateBatchSummary();
+        });
+        
+        asalBarangSelect.addEventListener('change', function() {
+            if (dataKadar && dataBerat > 0) getRekomendasiHarga();
+        });
+
         var submenuToggle = document.querySelector('.has-submenu');
         if (submenuToggle) {
             submenuToggle.addEventListener('click', function(e) {

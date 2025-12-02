@@ -40,6 +40,7 @@ $logout_url = "logout.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaksi Baru - Sistem Toko Emas</title>
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="responsive.css">
 
     <style>
         /* (CSS Modal Anda) */
@@ -546,6 +547,101 @@ $logout_url = "logout.php";
             submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
         });
     }
+    document.addEventListener('DOMContentLoaded', function() {
+    // Buat tombol menu mobile
+    const menuBtn = document.createElement('button');
+    menuBtn.className = 'mobile-menu-btn';
+    menuBtn.innerHTML = '<span></span><span></span><span></span>';
+    document.body.appendChild(menuBtn);
+
+    // Buat overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    const sidebar = document.querySelector('.sidebar');
+
+    // Toggle menu saat tombol diklik
+    menuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        // Hide hamburger button when menu is open
+        menuBtn.style.display = sidebar.classList.contains('active') ? 'none' : 'block';
+    });
+
+    // Tutup menu saat overlay diklik
+    overlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        // Show hamburger button when menu is closed
+        menuBtn.style.display = 'block';
+    });
+
+    // Tutup menu saat link diklik (untuk mobile)
+    const sidebarLinks = document.querySelectorAll('.sidebar-menu a:not(.has-submenu)');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Show hamburger button when menu is closed
+                menuBtn.style.display = 'block';
+            }
+        });
+    });
+
+    // Tutup menu saat submenu link diklik
+    const submenuLinks = document.querySelectorAll('.submenu a');
+    submenuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Show hamburger button when menu is closed
+                menuBtn.style.display = 'block';
+            }
+        });
+    });
+
+    // ===== SUBMENU TOGGLE =====
+    const submenuToggle = document.querySelector('.has-submenu');
+    if (submenuToggle) {
+        submenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const submenu = this.nextElementSibling;
+            const isVisible = submenu.style.display === 'block';
+            
+            submenu.style.display = isVisible ? 'none' : 'block';
+            
+            // Animasi icon
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+            } else {
+                this.classList.add('active');
+            }
+        });
+    }
+
+    // ===== RESPONSIVE BEHAVIOR =====
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            // Tutup menu mobile saat layar diperbesar
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Show hamburger button when menu is closed
+                menuBtn.style.display = 'block';
+            }
+        }, 250);
+    });
+});
 </script>
 
 </body>

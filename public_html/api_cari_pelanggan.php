@@ -4,7 +4,7 @@ session_start();
 include 'koneksi.php';
 
 // Keamanan: Cek login
-if (!isset($_SESSION['index']) || $_SESSION['index'] !== true) {
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
     header('Content-Type: application/json');
     echo json_encode(['error' => 'Akses ditolak']);
     exit;

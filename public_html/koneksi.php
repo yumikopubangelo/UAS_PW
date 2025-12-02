@@ -17,8 +17,7 @@ if ($koneksi->connect_error) {
     die("Koneksi gagal: " . $koneksi->connect_error);
 }
 
-// (Opsional) Mengatur charset ke utf8mb4 untuk dukungan emoji, dll.
-$koneksi->set_charset("utf8mb4");
+
 
 // echo "Koneksi ke database MySQL berhasil!";
 ?>

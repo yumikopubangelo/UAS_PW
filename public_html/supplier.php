@@ -55,111 +55,7 @@ $colspan = 5;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Supplier - Sistem Toko Emas</title>
     <link rel="stylesheet" href="dashboard.css">
-
-    <style>
-        .page-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .filter-group input { padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; min-width: 250px; }
-        .btn-primary { padding: 0.75rem 1.2rem; border: none; border-radius: 6px; background-color: #007bff; color: white; font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color 0.2s ease; }
-        .btn-primary:hover { background-color: #0056b3; }
-        .data-table { width: 100%; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.08); border-radius: 10px; overflow: hidden; }
-        .data-table th, .data-table td { padding: 1rem 1.25rem; text-align: left; border-bottom: 1px solid #f0f0f0; }
-        .data-table thead { background-color: #f8f9fa; }
-        .data-table th { font-weight: 600; color: #555; font-size: 0.9rem; text-transform: uppercase; }
-        .data-table tbody tr:hover { background-color: #f5f5f5; }
-        .data-table td { color: #333; }
-        
-        /* PERBAIKAN: CSS Tombol Aksi dirapikan */
-        .data-table td.action-buttons { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px;
-        }
-        .action-buttons .btn-edit, .action-buttons .btn-delete { 
-            padding: 0.4rem 0.8rem; 
-            margin-right: 0; /* Hapus margin-right: 5px */
-            text-decoration: none; color: white; border: none; 
-            border-radius: 5px; cursor: pointer; 
-        }
-        .btn-edit { background-color: #ffc107; } 
-        .btn-delete { background-color: #dc3545; }
-        
-        /* Feedback Message Style */
-        .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center; font-weight: bold; }
-        .error { background-color: #f8d7da; color: #721c24; }
-        .success { background-color: #d4edda; color: #155724; }
-
-        /* === CSS BARU UNTUK SEARCH === */
-        .no-results {
-            display: none; /* Sembunyi by default */
-            text-align: center;
-            font-style: italic;
-            color: #777;
-        }
-        /* === AKHIR CSS SEARCH === */
-
-        /* === CSS MODAL POP-UP (Sudah ada) === */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5); 
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: auto;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            animation: fadeIn 0.3s;
-        }
-        .modal-content h2 {
-            margin-top: 0;
-            color: #dc3545; 
-        }
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        .modal-buttons button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .btn-modal-cancel {
-            background-color: #6c757d; 
-            color: white;
-        }
-        .btn-modal-cancel:hover {
-            background-color: #5a6268;
-        }
-        .btn-modal-confirm {
-            background-color: #dc3545; 
-            color: white;
-        }
-        .btn-modal-confirm:hover {
-            background-color: #c82333;
-        }
-        @keyframes fadeIn {
-            from {opacity: 0; transform: scale(0.9);}
-            to {opacity: 1; transform: scale(1);}
-        }
-        /* === AKHIR DARI CSS MODAL === */
-    </style>
+    <link rel="stylesheet" href="supplier.css">
 </head>
 <body>
     <div class="dashboard-container">
@@ -189,6 +85,8 @@ $colspan = 5;
                 
             </ul>
         </nav>
+
+        <div class="sidebar-overlay"></div>
 
         <main class="main-content">
             
@@ -278,11 +176,52 @@ $colspan = 5;
         </div>
     </div>
     <script>
+        // Mobile menu button
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+
+        // Buat tombol menu mobile
+        const menuBtn = document.createElement('button');
+        menuBtn.className = 'mobile-menu-btn';
+        menuBtn.innerHTML = '<span></span><span></span><span></span>';
+        document.body.appendChild(menuBtn);
+
+        // Toggle menu saat tombol diklik
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+            // Hide hamburger button when menu is open
+            menuBtn.style.display = sidebar.classList.contains('active') ? 'none' : 'block';
+        });
+
+        // Close menu when clicking overlay
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Show hamburger button when menu is closed
+                menuBtn.style.display = 'block';
+            });
+        }
+
+        // Close menu on window resize if desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                if (overlay) overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Show hamburger button when menu is closed
+                menuBtn.style.display = 'block';
+            }
+        });
+
         // Script untuk toggle submenu
         document.querySelector('.has-submenu').addEventListener('click', function(e) {
             e.preventDefault();
             let submenu = this.nextElementSibling;
-            
+
             // Toggle hanya jika bukan halaman aktif
             if (!this.parentElement.querySelector('.submenu li.active-sub')) {
                 submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';

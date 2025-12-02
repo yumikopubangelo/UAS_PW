@@ -4,12 +4,12 @@ session_start();
 include 'koneksi.php';
 
 // 2. KEAMANAN: Cek login & Role (Hanya Admin/Pemilik)
-if (!isset($_SESSION['index']) || $_SESSION['index'] !== true) {
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
     $_SESSION['error_message'] = "Akses ditolak. Silakan login.";
     header("Location: index.php");
     exit;
 }
-$role = $_SESSION['Role'];
+$role = $_SESSION['role'];
 if ($role != 'admin' && $role != 'pemilik') {
     $_SESSION['error_message'] = "Anda tidak memiliki hak akses untuk aksi ini.";
     header("Location: home.php");

@@ -3,12 +3,12 @@
 session_start();
 include 'koneksi.php';
 
-if (!isset($_SESSION['index']) || $_SESSION['index'] !== true) {
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
     $_SESSION['error_message'] = "Akses ditolak. Silakan login.";
     header("Location: index.php");
     exit;
 }
-$role = $_SESSION['Role'];
+$role = $_SESSION['role'];
 if ($role != 'admin' && $role != 'pemilik') {
     $_SESSION['error_message'] = "Anda tidak memiliki hak akses ke halaman ini.";
     header("Location: home.php");
@@ -41,7 +41,7 @@ $item = $result_item->fetch_assoc();
 $stmt_item->close();
 $koneksi->close();
 
-$nama_karyawan = $_SESSION['NamaKaryawan'];
+$nama_karyawan = $_SESSION['nama_karyawan'];
 $role_text = ($role == 'pemilik') ? 'Pemilik' : 'Admin';
 $logout_url = "logout.php";
 ?>

@@ -76,3 +76,39 @@ GET DATA: Array
     [tipe] => penjualan
 )
 
+GET DATA: Array
+(
+    [kode] => BRG00016
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => BRG00016
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => BRG00010
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => BRG00016
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => BRG00016
+    [tipe] => penjualan
+)
+
+GET DATA: Array
+(
+    [kode] => BRG00016
+    [tipe] => penjualan
+)
+

@@ -70,7 +70,7 @@ if ($is_admin_or_pemilik) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Stok - Sistem Toko Emas</title>
     <link rel="stylesheet" href="dashboard.css">
-
+    <link rel="stylesheet" href="stok.css">
     <style>
         .page-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .filter-group input { padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; min-width: 250px; }
@@ -254,43 +254,41 @@ if ($is_admin_or_pemilik) {
                         <?php else: ?>
                             <?php foreach ($stok_list as $item): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($item['KodeBarang']); ?></td>
-                                <td><?php echo htmlspecialchars($item['NamaProduk']); ?></td>
-                                <td><?php echo htmlspecialchars($item['Tipe']); ?></td>
-                                <td><?php echo htmlspecialchars($item['Kadar']); ?></td>
-                                <td><?php echo number_format($item['BeratGram'], 2, ',', '.'); ?></td>
-                                
-                                <?php if ($is_admin_or_pemilik): ?>
-                                    <td class="col-modal">
-                                        <?php echo 'Rp ' . number_format($item['HargaBeliModal'], 0, ',', '.'); ?>
-                                    </td>
-                                <?php endif; ?>
-                                
-                                <td><?php echo date("d-m-Y", strtotime($item['TanggalMasuk'])); ?></td>
-                                <td><?php echo htmlspecialchars($item['AsalBarang']); ?></td>
-                                <td>
-                                    <?php if ($item['Status'] == 'Tersedia'): ?>
-                                        <span class="status status-tersedia">Tersedia</span>
-                                    <?php else: ?>
-                                        <span class="status status-terjual">Terjual</span>
-                                    <?php endif; ?>
-                                </td>
-                                
-                                <?php if ($is_admin_or_pemilik): ?>
-                                    <td class="action-buttons">
-                                        <?php if ($item['Status'] == 'Tersedia'): ?>
-                                            <a href="stok_edit.php?kode=<?php echo $item['KodeBarang']; ?>" class="btn-edit">Edit</a>
-                                            
-                                            <!-- PERBAIKAN: Menggunakan Modal Kustom -->
-                                            <a href="stok_hapus.php?kode=<?php echo $item['KodeBarang']; ?>" 
-                                               class="btn-delete" 
-                                               onclick="showDeleteModal(event, '<?php echo addslashes($item['NamaProduk'] . ' (' . $item['KodeBarang'] . ')'); ?>')">
-                                                Hapus
-                                            </a>
-                                        <?php endif; ?>
-                                    </td>
-                                <?php endif; ?>
-                            </tr>
+    <td data-label="Kode"><?php echo htmlspecialchars($item['KodeBarang']); ?></td>
+    <td data-label="Nama Barang"><?php echo htmlspecialchars($item['NamaProduk']); ?></td>
+    <td data-label="Tipe"><?php echo htmlspecialchars($item['Tipe']); ?></td>
+    <td data-label="Kadar"><?php echo htmlspecialchars($item['Kadar']); ?></td>
+    <td data-label="Berat"><?php echo number_format($item['BeratGram'], 2, ',', '.'); ?> gr</td>
+    
+    <?php if ($is_admin_or_pemilik): ?>
+        <td data-label="Modal (HPP)" class="col-modal">
+            <?php echo 'Rp ' . number_format($item['HargaBeliModal'], 0, ',', '.'); ?>
+        </td>
+    <?php endif; ?>
+    
+    <td data-label="Tgl. Masuk"><?php echo date("d-m-Y", strtotime($item['TanggalMasuk'])); ?></td>
+    <td data-label="Asal Barang"><?php echo htmlspecialchars($item['AsalBarang']); ?></td>
+    <td data-label="Status">
+        <?php if ($item['Status'] == 'Tersedia'): ?>
+            <span class="status status-tersedia">Tersedia</span>
+        <?php else: ?>
+            <span class="status status-terjual">Terjual</span>
+        <?php endif; ?>
+    </td>
+    
+    <?php if ($is_admin_or_pemilik): ?>
+        <td class="action-buttons">
+            <?php if ($item['Status'] == 'Tersedia'): ?>
+                <a href="stok_edit.php?kode=<?php echo $item['KodeBarang']; ?>" class="btn-edit">Edit</a>
+                <a href="stok_hapus.php?kode=<?php echo $item['KodeBarang']; ?>" 
+                   class="btn-delete" 
+                   onclick="showDeleteModal(event, '<?php echo addslashes($item['NamaProduk'] . ' (' . $item['KodeBarang'] . ')'); ?>')">
+                    Hapus
+                </a>
+            <?php endif; ?>
+        </td>
+    <?php endif; ?>
+</tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
                         
@@ -392,6 +390,64 @@ if ($is_admin_or_pemilik) {
                 closeModal();
             }
         });
+        // === Mobile Menu Handler ===
+document.addEventListener('DOMContentLoaded', function() {
+    // Buat tombol menu mobile
+    const menuBtn = document.createElement('button');
+    menuBtn.className = 'mobile-menu-btn';
+    menuBtn.innerHTML = '<span></span><span></span><span></span>';
+    document.body.appendChild(menuBtn);
+
+    // Buat overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    const sidebar = document.querySelector('.sidebar');
+
+    // Toggle menu
+    menuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        menuBtn.style.display = sidebar.classList.contains('active') ? 'none' : 'block';
+    });
+
+    // Tutup menu saat overlay diklik
+    overlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        menuBtn.style.display = 'block';
+    });
+
+    // Tutup menu saat link diklik
+    const sidebarLinks = document.querySelectorAll('.sidebar-menu a:not(.has-submenu)');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                menuBtn.style.display = 'block';
+            }
+        });
+    });
+
+    // Handle resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                menuBtn.style.display = 'block';
+            }
+        }, 250);
+    });
+});
     </script>
     <!-- === AKHIR DARI JAVASCRIPT === -->
 

@@ -6,7 +6,7 @@ session_start();
 include 'koneksi.php'; // Menyediakan variabel $koneksi
 
 // 3. KEAMANAN: Cek login
-if (!isset($_SESSION['index']) || $_SESSION['index'] !== true) {
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
     die("Akses ditolak. Silakan login terlebih dahulu.");
 }
 

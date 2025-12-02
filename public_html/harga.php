@@ -61,32 +61,7 @@ $koneksi->close(); // Tutup koneksi setelah selesai ambil data
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Update Harga Harian - Sistem Toko Emas</title>
         <link rel="stylesheet" href="dashboard.css">
-
-        <style>
-            /* (CSS Anda sudah benar, tidak diubah) */
-            .page-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; }
-            .form-card, .table-card { background-color: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
-            .form-card h3 { margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 1rem; }
-            .form-group { margin-bottom: 1rem; }
-            .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-            .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-            .btn-primary, .btn-secondary { width: 100%; padding: 0.75rem 1.2rem; border: none; border-radius: 6px; color: white; font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color 0.2s ease; text-align: center; }
-            .btn-primary { background-color: #007bff; margin-top: 1rem; }
-            .btn-primary:hover { background-color: #0056b3; }
-            .btn-secondary { background-color: #6c757d; margin-bottom: 1rem; }
-            .btn-secondary:hover { background-color: #5a6268; }
-            .api-note { font-size: 0.85rem; color: #666; text-align: center; margin-bottom: 1rem; }
-            .data-table { width: 100%; border-collapse: collapse; }
-            .data-table th, .data-table td { padding: 1rem 1.25rem; text-align: left; border-bottom: 1px solid #f0f0f0; }
-            .data-table thead { background-color: #f8f9fa; }
-            .data-table th { font-weight: 600; color: #555; font-size: 0.9rem; text-transform: uppercase; }
-            .data-table td { color: #333; }
-            .col-jual { font-weight: 600; color: #28a745; }
-            .col-beli { font-weight: 600; color: #dc3545; }
-            .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center; font-weight: bold; }
-            .error { background-color: #f8d7da; color: #721c24; }
-            .success { background-color: #d4edda; color: #155724; }
-        </style>
+        <link rel="stylesheet" href="harga.css">
     </head>
     <body>
 
@@ -125,7 +100,9 @@ $koneksi->close(); // Tutup koneksi setelah selesai ambil data
                     
                 </ul>
             </nav>
-
+    
+            <div class="sidebar-overlay"></div>
+    
             <main class="main-content">
                 
                 <header class="header">
@@ -225,6 +202,47 @@ $koneksi->close(); // Tutup koneksi setelah selesai ambil data
         </div>
 
   <script>
+    // Mobile menu button
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+
+    // Buat tombol menu mobile
+    const menuBtn = document.createElement('button');
+    menuBtn.className = 'mobile-menu-btn';
+    menuBtn.innerHTML = '<span></span><span></span><span></span>';
+    document.body.appendChild(menuBtn);
+
+    // Toggle menu saat tombol diklik
+    menuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        if (overlay) overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        // Hide hamburger button when menu is open
+        menuBtn.style.display = sidebar.classList.contains('active') ? 'none' : 'block';
+    });
+
+    // Close menu when clicking overlay
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Show hamburger button when menu is closed
+            menuBtn.style.display = 'block';
+        });
+    }
+
+    // Close menu on window resize if desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Show hamburger button when menu is closed
+            menuBtn.style.display = 'block';
+        }
+    });
+
     // === Menampilkan tanggal hari ini ===
      var submenuToggle = document.querySelector('.has-submenu');
         if (submenuToggle) {
