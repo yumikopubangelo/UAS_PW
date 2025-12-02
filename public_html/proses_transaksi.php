@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $detail_items_json = $_POST['detail_items_json']; 
 
     // 6. Ambil data dari SESSION
-    $karyawanID = $_SESSION['KaryawanID']; 
+    $karyawan_id = $_SESSION['karyawan_id'] ?? 0; 
 
     // 7. DECODE JSON dan HITUNG TOTAL
     $items_array = json_decode($detail_items_json, true);
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       VALUES (?, ?, ?, ?, ?)";
         $stmt_trans = $koneksi->prepare($sql_trans);
         $stmt_trans->bind_param("iisdd", 
-            $pelanggan_id_db, $karyawanID, $tipe_transaksi, 
+            $pelanggan_id_db, $karyawan_id, $tipe_transaksi, 
             $total_transaksi, $total_ongkos
         );
         if (!$stmt_trans->execute()) {
